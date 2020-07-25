@@ -19,11 +19,11 @@
 
   <ItemGroup>
     <RestoreProjects Include="$(MSBuildThisFileDirectory)scripts\scripts.csproj" />
-    <RestoreProjects Include="$(MSBuildThisFileDirectory)src\Common\test_dependencies_fs\test_dependencies.fsproj" />
-    <RestoreProjects Include="$(MSBuildThisFileDirectory)src\Common\test_dependencies\test_dependencies.csproj" />
+    <RestoreProjects Include="$(RepoRoot)src\tests\Common\test_dependencies_fs\test_dependencies.fsproj" />
+    <RestoreProjects Include="$(RepoRoot)src\tests\Common\test_dependencies\test_dependencies.csproj" />
     <RestoreProjects Include="$(RepoRoot)src\tests\Common\CoreCLRTestLibrary\CoreCLRTestLibrary.csproj" />
     <RestoreProjects Include="$(MSBuildThisFileDirectory)external\external.csproj" />
-    <RestoreProjects Include="$(MSBuildThisFileDirectory)src\Common\ilasm\ilasm.ilproj" />
+    <RestoreProjects Include="$(RepoRoot)src\tests\Common\ilasm\ilasm.ilproj" />
   </ItemGroup>
 
   <Target Name="BuildTargetingPack" AfterTargets="BatchRestorePackages" Condition="$(__SkipTargetingPackBuild) != 'true'">
