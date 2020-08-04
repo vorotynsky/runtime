@@ -10,6 +10,8 @@
       <DisabledProjects Include="$(TestRoot)TestWrappers*\**\*.csproj" />
       <DisabledProjects Include="$(TestRoot)*\**\cs_template.csproj" />
       <DisabledProjects Include="$(TestRoot)Common\Coreclr.TestWrapper\Coreclr.TestWrapper.csproj" />
+      <DisabledProjects Include="$(TestRoot)Common\scripts\scripts.csproj" />
+      <DisabledProjects Include="$(TestRoot)Common\external\external.csproj" />
       <DisabledProjects Include="$(TestRoot)Common\test_dependencies\test_dependencies.csproj" />
       <DisabledProjects Include="$(TestRoot)Common\test_dependencies_fs\test_dependencies.fsproj" />
       <DisabledProjects Include="$(TestRoot)Common\CoreFX\TestFileSetup\CoreFX.TestUtils.TestFileSetup.csproj" />
