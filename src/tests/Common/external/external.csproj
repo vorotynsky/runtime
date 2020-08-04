@@ -24,6 +24,10 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <NoWarn>$(NoWarn);NU1701</NoWarn>
+
+    <!-- This is to suppress calling the target GetLiveRefAssemblies from -->
+    <!-- src/tests/Directory.Build.targets as this project doesn't actually need the libraries. -->
+    <ReferenceSystemPrivateCoreLib>true</ReferenceSystemPrivateCoreLib>
   </PropertyGroup>
 
   <!-- Some out-of-band packages like System.ComponentModel.Primitives
