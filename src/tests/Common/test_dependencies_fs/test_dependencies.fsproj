@@ -10,9 +10,7 @@
     <LibrariesConfiguration>Release</LibrariesConfiguration>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <ProjectAssetsFile>$(RepoRoot)src\tests\Common\test_dependencies_fs\obj\project.assets.json</ProjectAssetsFile>
-  </PropertyGroup>
+  <Target Name="Build" DependsOnTargets="$(TraversalBuildDependsOn)" />
 
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)\empty.fs" />

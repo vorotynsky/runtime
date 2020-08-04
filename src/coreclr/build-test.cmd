@@ -204,7 +204,7 @@ REM ============================================================================
 
 if defined __SkipStressDependencies goto skipstressdependencies
 
-call "%__ProjectDir%\tests\setup-stress-dependencies.cmd" /arch %__BuildArch% /outputdir %__BinDir%
+call "%__RepoRootDir%\src\tests\Common\setup-stress-dependencies.cmd" /arch %__BuildArch% /outputdir %__BinDir%
 if errorlevel 1 (
     echo %__ErrMsgPrefix%%__MsgPrefix%Error: setup-stress-dependencies failed.
     goto     :Exit_Failure

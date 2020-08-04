@@ -18,18 +18,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <RestoreProjects Include="$(MSBuildThisFileDirectory)scripts\scripts.csproj" />
+    <RestoreProjects Include="$(RepoRoot)src\tests\Common\scripts\scripts.csproj" />
     <RestoreProjects Include="$(RepoRoot)src\tests\Common\test_dependencies_fs\test_dependencies.fsproj" />
     <RestoreProjects Include="$(RepoRoot)src\tests\Common\test_dependencies\test_dependencies.csproj" />
     <RestoreProjects Include="$(RepoRoot)src\tests\Common\CoreCLRTestLibrary\CoreCLRTestLibrary.csproj" />
-    <RestoreProjects Include="$(MSBuildThisFileDirectory)external\external.csproj" />
+    <RestoreProjects Include="$(RepoRoot)src\tests\Common\external\external.csproj" />
     <RestoreProjects Include="$(RepoRoot)src\tests\Common\ilasm\ilasm.ilproj" />
   </ItemGroup>
 
   <Target Name="BuildTargetingPack" AfterTargets="BatchRestorePackages" Condition="$(__SkipTargetingPackBuild) != 'true'">
     <Message Text="Building Targeting Pack" Importance="High" />
     <Error  Text="TargetOS has not been specified. Please do that then run build again."  Condition="'$(TargetOS)' == 'AnyOS'" />
-    <MSBuild Projects="$(MSBuildThisFileDirectory)external\external.csproj"
+    <MSBuild Projects="$(RepoRoot)src\tests\Common\external\external.csproj"
              Targets="Build" />
   </Target>
 

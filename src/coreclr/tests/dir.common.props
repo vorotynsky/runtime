@@ -12,16 +12,31 @@
   <PropertyGroup>
     <OSPlatformConfig>$(TargetOS).$(TargetArchitecture).$(Configuration)</OSPlatformConfig>
 
-    <TestSrcDir Condition="'$(TestSrcDir)' == ''">$(RepoRoot)src\tests</TestSrcDir>
-    <BuildProjectRelativeDir>$([MSBuild]::MakeRelative($(TestSrcDir), $(MSBuildProjectDirectory)))\$(MSBuildProjectName)\</BuildProjectRelativeDir>
+    <BinDir>$(ArtifactsDir)bin\coreclr\$(OSPlatformConfig)\</BinDir>
+
+    <BaseTestOutputPath>$(ArtifactsDir)tests\coreclr</BaseTestOutputPath>
+    <BaseTestOutputPath Condition="'$(__TestRootDir)' != ''">$(__TestRootDir)</BaseTestOutputPath>
+    <BaseTestOutputPathWithConfig>$(BaseTestOutputPath)\$(OSPlatformConfig)\</BaseTestOutputPathWithConfig>
+
+    <TestWorkingDir>$(BaseTestOutputPathWithConfig)\</TestWorkingDir>
+
+    <TestSourceDir Condition="'$(TestSourceDir)' == ''">$([MSBuild]::NormalizePath('$(RepoRoot)/src/tests/'))</TestSourceDir>
+    <BuildProjectRelativeDir>$([MSBuild]::MakeRelative($(TestSourceDir), $(MSBuildProjectDirectory)))\$(MSBuildProjectName)\</BuildProjectRelativeDir>
 
     <!-- BaseIntermediateOutputPath is used by the SDK as the location
          for the lock file, and props/targets from nuget packages. -->
-    <BaseIntermediateOutputPath>$(RepoRoot)/artifacts/tests/coreclr/obj/$(OSPlatformConfig)/Managed/$(BuildProjectRelativeDir)</BaseIntermediateOutputPath>
-    <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
+    <BaseIntermediateOutputPath>$(BaseTestOutputPath)\obj\$(OSPlatformConfig)\Managed\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath Condition="'$(__ManagedTestIntermediatesDir)' != ''">$(__ManagedTestIntermediatesDir)\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)$(BuildProjectRelativeDir)\</IntermediateOutputPath>
+    <__NativeTestIntermediatesDir Condition="'$(__NativeTestIntermediatesDir)' == ''">$(BaseTestOutputPath)\obj\$(OSPlatformConfig)\Native\</__NativeTestIntermediatesDir>
 
-    <BaseOutputPath>$(RepoRoot)/artifacts/tests/coreclr/$(OSPlatformConfig)/$(BuildProjectRelativeDir)</BaseOutputPath>
-    <OutputPath>$(BaseOutputPath)</OutputPath>
+    <OutputPath>$(BaseTestOutputPathWithConfig)$(BuildProjectRelativeDir)</OutputPath>
+
+    <PackageOutputPath>$(IntermediateOutputPath)</PackageOutputPath>
+    <RestoreOutputPath>$(IntermediateOutputPath)</RestoreOutputPath>
+    <MSBuildProjectExtensionsPath>$(IntermediateOutputPath)</MSBuildProjectExtensionsPath>
+
+    <ProjectAssetsFile>$(RestoreOutputPath)/project.assets.json</ProjectAssetsFile>
   </PropertyGroup>
   
   <PropertyGroup>
