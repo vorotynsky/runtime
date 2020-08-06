@@ -87,6 +87,21 @@ jobs:
           du -sh $(Build.SourcesDirectory)/*
           df -h
         displayName: Disk Usage after Build
+    
+    - template: /eng/pipelines/libraries/prepare-for-bin-publish.yml
+      parameters:
+        isOfficialBuild: false
+    
+    - template: /eng/pipelines/common/upload-artifact-step.yml
+      parameters:
+        rootFolder: $(Build.ArtifactStagingDirectory)/artifacts
+        includeRootFolder: false
+        archiveType: $(archiveType)
+        archiveExtension: $(archiveExtension)
+        tarCompression: $(tarCompression)
+        artifactName: global_build_bin_${{ parameters.osGroup }}_${{ parameters.buildConfig }}_${{ parameters.archType }}_${{ parameters.nameSuffix}}
+        displayName: Build Assets
+        condition: always()
 
       # If intended to send extra steps after regular build add them here.
     - ${{ if ne(parameters.extraStepsTemplate, '') }}:

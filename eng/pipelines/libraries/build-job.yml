@@ -112,6 +112,7 @@ jobs:
               tarCompression: $(tarCompression)
               artifactName: $(librariesBuildArtifactName)
               displayName: Build Assets
+              condition: always()
           
           - ${{ if containsValue(parameters.testBuildPlatforms, parameters.platform) }}:
             - template: /eng/pipelines/common/upload-artifact-step.yml

@@ -22,6 +22,7 @@ steps:
       inputs:
         sourceFolder: $(Build.SourcesDirectory)/artifacts/bin/ref
         targetFolder: $(Build.ArtifactStagingDirectory)/artifacts/bin/ref
+      condition: always()
 
   - task: CopyFiles@2
     displayName: Prepare shared framework ref assemblies to publish
