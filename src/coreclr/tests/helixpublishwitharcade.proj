@@ -39,7 +39,7 @@
       </_PropertiesToPass>
 
       
-      <_PropertiesToPass Condition="'$(TargetArchitecture)' == 'wasm' ">
+      <_PropertiesToPass Condition="'$(__BuildArch)' == 'wasm' ">
         $(_PropertiesToPass);IncludeDotNetCli=true;DotNetCliRuntime=linux-x64
       </_PropertiesToPass>
     </PropertyGroup>
@@ -71,10 +71,10 @@
 
   <!-- Choose a suitable runtime RID for Helix to restore the dotnet cli -->
   <PropertyGroup Condition="'$(HelixRuntimeRid)' == ''">
-    <HelixRuntimeRid Condition="'$(__TargetOS)' == 'Windows_NT'">win-$(TargetArchitecture)</HelixRuntimeRid>
-    <HelixRuntimeRid Condition="'$(__TargetOS)' == 'OSX'">osx-$(TargetArchitecture)</HelixRuntimeRid>
-    <HelixRuntimeRid Condition="'$(__TargetOS)' == 'Linux'">linux-$(TargetArchitecture)</HelixRuntimeRid>
-    <HelixRuntimeRid Condition="'$(__TargetOS)' == 'Linux_musl'">linux-musl-$(TargetArchitecture)</HelixRuntimeRid>
+    <HelixRuntimeRid Condition="'$(__TargetOS)' == 'Windows_NT'">win-$(__BuildArch)</HelixRuntimeRid>
+    <HelixRuntimeRid Condition="'$(__TargetOS)' == 'OSX'">osx-$(__BuildArch)</HelixRuntimeRid>
+    <HelixRuntimeRid Condition="'$(__TargetOS)' == 'Linux'">linux-$(__BuildArch)</HelixRuntimeRid>
+    <HelixRuntimeRid Condition="'$(__TargetOS)' == 'Linux_musl'">linux-musl-$(__BuildArch)</HelixRuntimeRid>
     <HelixRuntimeRid Condition="'$(__TargetOS)' == 'Browser'">browser-wasm</HelixRuntimeRid>
   </PropertyGroup>
 
@@ -203,8 +203,8 @@
     <FailOnMissionControlTestFailure>true</FailOnMissionControlTestFailure>
     <FailOnWorkItemFailure>true</FailOnWorkItemFailure>
     <HelixArchitecture>$(TargetArchitecture)</HelixArchitecture>
-    <HelixConfiguration Condition=" '$(Scenario)' == 'normal' ">$(Configuration)</HelixConfiguration>
-    <HelixConfiguration Condition=" '$(Scenario)' != 'normal' ">$(Configuration)-$(Scenario)</HelixConfiguration>
+    <HelixConfiguration Condition=" '$(Scenario)' == 'normal' ">$(__BuildType)</HelixConfiguration>
+    <HelixConfiguration Condition=" '$(Scenario)' != 'normal' ">$(__BuildType)-$(Scenario)</HelixConfiguration>
     <RunCrossGen Condition=" '$(RunCrossGen)' != 'true' ">false</RunCrossGen>
     <RunCrossGen2 Condition=" '$(RunCrossGen2)' != 'true' ">false</RunCrossGen2>
     <LongRunningGCTests Condition=" '$(LongRunningGCTests)' != 'true' ">false</LongRunningGCTests>
@@ -212,8 +212,8 @@
     <TestRunNamePrefix Condition="'$(RuntimeFlavorDisplayName)' != ''">$(RuntimeFlavorDisplayName) </TestRunNamePrefix> 
     <TestRunNamePrefix Condition=" '$(RunCrossGen)' == 'true' ">R2R </TestRunNamePrefix>
     <TestRunNamePrefix Condition=" '$(RunCrossGen2)' == 'true' ">R2R-CG2 </TestRunNamePrefix>
-    <TestRunNamePrefix Condition=" '$(Scenario)' == 'normal' ">$(TestRunNamePrefix)$(TargetOS) $(TargetArchitecture) $(Configuration) @ </TestRunNamePrefix>
-    <TestRunNamePrefix Condition=" '$(Scenario)' != 'normal' ">$(TestRunNamePrefix)$(TargetOS) $(TargetArchitecture) $(Configuration) $(Scenario) @ </TestRunNamePrefix>
+    <TestRunNamePrefix Condition=" '$(Scenario)' == 'normal' ">$(TestRunNamePrefix)$(__TargetOS) $(__BuildArch) $(__BuildType) @ </TestRunNamePrefix>
+    <TestRunNamePrefix Condition=" '$(Scenario)' != 'normal' ">$(TestRunNamePrefix)$(__TargetOS) $(__BuildArch) $(__BuildType) $(Scenario) @ </TestRunNamePrefix>
     <TimeoutPerTestInMilliseconds Condition=" '$(TimeoutPerTestInMinutes)' != '' ">$([System.TimeSpan]::FromMinutes($(TimeoutPerTestInMinutes)).TotalMilliseconds)</TimeoutPerTestInMilliseconds>
     <WaitForWorkItemCompletion>true</WaitForWorkItemCompletion>
     <_XUnitParallelMode>collections</_XUnitParallelMode>
@@ -254,11 +254,11 @@
     <HelixPreCommand Include="export __TestEnv=$HELIX_WORKITEM_PAYLOAD/$(TestEnvFileName)" />
     <HelixPreCommand Include="export __TestTimeout=$(TimeoutPerTestInMilliseconds)" Condition=" '$(TimeoutPerTestInMilliseconds)' != '' " />
     <HelixPreCommand Include="export __CollectDumps=1" />
-    <HelixPreCommand Include="export __CrashDumpFolder=$HELIX_DUMP_FOLDER" Condition=" '$(TargetOS)' != 'OSX' " />
-    <HelixPreCommand Include="export __CrashDumpFolder=/cores" Condition=" '$(TargetOS)' == 'OSX' " /> <!-- Helix doesn't specify the dump folder for OSX 10.14, so we need to manually specify it. Tracked by dotnet/core-eng#7872 -->
+    <HelixPreCommand Include="export __CrashDumpFolder=$HELIX_DUMP_FOLDER" Condition=" '$(__TargetOS)' != 'OSX' " />
+    <HelixPreCommand Include="export __CrashDumpFolder=/cores" Condition=" '$(__TargetOS)' == 'OSX' " /> <!-- Helix doesn't specify the dump folder for OSX 10.14, so we need to manually specify it. Tracked by dotnet/core-eng#7872 -->
     <HelixPreCommand Include="cat $__TestEnv" />
-    <HelixPreCommand Include="sudo bash -c 'echo $HELIX_DUMP_FOLDER/core.%u.%p > /proc/sys/kernel/core_pattern'" Condition=" '$(TargetOS)' != 'OSX' " />
-    <HelixPreCommand Include="ulimit -c unlimited" Condition=" '$(TargetOS)' == 'OSX' " />
+    <HelixPreCommand Include="sudo bash -c 'echo $HELIX_DUMP_FOLDER/core.%u.%p > /proc/sys/kernel/core_pattern'" Condition=" '$(__TargetOS)' != 'OSX' " />
+    <HelixPreCommand Include="ulimit -c unlimited" Condition=" '$(__TargetOS)' == 'OSX' " />
   </ItemGroup>
 
   <PropertyGroup>
