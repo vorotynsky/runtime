@@ -223,15 +223,15 @@ namespace System
             int i = InternalSample();
             long result = 0;
 
-            result = result | InternalSample();
+            result = result | (long) InternalSample();
             result = result | (1u << 31 & (i << 2));
-            result = result | (1 & i);
+            result = result | (1u & i);
 
             result <<= 32;
 
-            result = result | InternalSample();
+            result = result | (long) InternalSample();
             result = result | (1u << 31 & (i << 3));
-            result = result | (1 & (i >> 3));
+            result = result | (1u & (i >> 3));
 
             return result;
         }
@@ -243,7 +243,8 @@ namespace System
         ==============================================================================*/
         public virtual long NextInt64()
         {
-            return long.MaxValue & FullLong();
+            throw new NotImplementedException();
+            // return long.MaxValue & FullLong();
         }
 
         /*==================================NextInt64===================================
@@ -259,10 +260,11 @@ namespace System
             if (maxValue == 0)
                 return 0;
 
-            return (long.MaxValue & FullLong()) % maxValue;
+            long fullLong = (long) FullLong();
+            return (long.MaxValue & fullLong) % maxValue;
         }
 
-        :/*==================================NextInt64===================================
+        /*==================================NextInt64===================================
         **Returns: A long [minvalue..maxvalue)
         **Arguments: minValue -- the least legal value for the Random number.
         **           maxValue -- One greater than the greatest legal return value.
